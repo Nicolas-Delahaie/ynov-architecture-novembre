@@ -1,0 +1,20 @@
+services:
+  nginx:
+    image: nginx:latest
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=${DATABASE_ROOT_PASSWORD}"]
+    #   timeout: 5s
+    #   retries: 5
+    #   start_period: 60s
+    ports:
+      - 8000:80
+
+  rasp1:
+    build:
+      dockerfile: Dockerfile-raspberry
+  rasp2:
+    build:
+      dockerfile: Dockerfile-raspberry
+  rasp3:
+    build:
+      dockerfile: Dockerfile-raspberry

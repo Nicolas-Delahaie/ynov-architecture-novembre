@@ -1,0 +1,5 @@
+FROM alpine:latest
+RUN apk update && apk add bash
+WORKDIR /workspace
+EXPOSE 80
+# CMD ["/bin/bash"]

@@ -33,3 +33,5 @@ for i in "${!LOCAL_PORTS[@]}"; do
         # autossh -M 0 -f -N -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -R $REMOTE_PORT:localhost:$LOCAL_PORT $USER@$HOST
     fi
 done
+
+tail -f /dev/null # To keep container opened

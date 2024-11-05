@@ -1,11 +1,6 @@
 services:
   nginx:
     image: nginx:latest
-    # healthcheck:
-    #   test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=${DATABASE_ROOT_PASSWORD}"]
-    #   timeout: 5s
-    #   retries: 5
-    #   start_period: 60s
     depends_on:
       - mysql
     ports:
@@ -37,13 +32,19 @@ services:
 
   rasp1:
     build:
-      dockerfile: Dockerfile-raspberry
+      dockerfile: ./Dockerfile-raspberry
+    depends_on:
+      - nginx
   rasp2:
     build:
-      dockerfile: Dockerfile-raspberry
+      dockerfile: ./Dockerfile-raspberry
+    depends_on:
+      - nginx
   rasp3:
     build:
-      dockerfile: Dockerfile-raspberry
+      dockerfile: ./Dockerfile-raspberry
+    depends_on:
+      - nginx
 
 volumes:
   db-data:

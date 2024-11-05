@@ -4,4 +4,4 @@ Mise en place d'une architecture pour communiquer avec des rapsberry grace à de
 
 ## Utilisation
 
-A la racine du projet, executer `docker compose up`
+A la racine du projet, executer `docker compose up --build`

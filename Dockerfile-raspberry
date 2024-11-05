@@ -2,8 +2,8 @@
 FROM ubuntu:latest
 
 RUN apt-get update && \
-    apt-get install -y systemd && \
-    apt-get install -y lsof
+    apt-get install -y lsof && \
+    apt-get install -y curl
 
 WORKDIR /workspace
 EXPOSE 80

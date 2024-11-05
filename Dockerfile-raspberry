@@ -1,7 +1,12 @@
 # Raspberry image
+FROM ubuntu:latest
 
-FROM alpine:latest
-RUN apk update && apk add bash
+RUN apt-get update && \
+    apt-get install -y systemd && \
+    apt-get install -y lsof
+
 WORKDIR /workspace
 EXPOSE 80
-CMD ["tail", "-f","/dev/null"]
+COPY ./register.sh /workspace/
+
+CMD ["/workspace/register.sh"]

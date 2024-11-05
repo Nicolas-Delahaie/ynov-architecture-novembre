@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raspberry Pi Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #loading {
+            display: none;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Raspberry Pi Active</h1>
+    <div id="loading">Loading active containers...</div>
+    <ul id="pi-list"></ul>
+    <div id="error-message" class="error"></div>
+
+    <script>
+        const loadingElement = document.getElementById('loading');
+        const list = document.getElementById('pi-list');
+        const errorMessage = document.getElementById('error-message');
+
+        fetch('http://localhost:3000/api/get_active_containers')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                loadingElement.style.display = 'none';
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `IP: ${item.ip}, Port: ${item.port}`;
+                    list.appendChild(li);
+                });
+            })
+            .catch(error => {
+                loadingElement.style.display = 'none';
+                errorMessage.innerText = `Error fetching data: ${error.message}`;
+            });
+    </script>
+</body>
+</html>

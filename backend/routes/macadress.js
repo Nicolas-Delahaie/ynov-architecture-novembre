@@ -16,7 +16,8 @@ router.get('/macadresses', async (req, res) => {
 // Route to add a new macadress
 router.post('/macadresses', async (req, res) => {
     const macadress = new MacAdress({
-        adress: req.body
+        adress: req.body.adress,
+        id: await MacAdress.countDocuments() + 1 // Auto-increment ID
     });
 
     try {

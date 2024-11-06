@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('archi', 'root', 'root', {
-    host: 'localhost',
+    host: 'mysql',
     dialect: 'mysql',
 });
 

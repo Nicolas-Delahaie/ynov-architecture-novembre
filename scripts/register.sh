@@ -1,13 +1,12 @@
 #!/bin/bash
 
-HOST="hub.bzctoons.net"
-USER="register"
+HOST="localhost"
+USER="root"
 API_REGISTER_ENDPOINT="http://$HOST/api/register"
 MAC=$(cat /sys/class/net/eth0/address)
 
 # read locals ports from config file
-# LOCAL_PORTS=$(cat /etc/airnet/ports)
-LOCAL_PORTS="22,80,443,8327"
+LOCAL_PORTS=$(cat /etc/airnet/ports)
 
 echo "Local ports: $LOCAL_PORTS"
 # create an array of ports
@@ -30,8 +29,6 @@ for i in "${!LOCAL_PORTS[@]}"; do
     if lsof -Pi :$LOCAL_PORT -sTCP:LISTEN -t >/dev/null ; then
         echo "Local port $LOCAL_PORT is used"
         echo "Creating reverse SSH tunnel for port $LOCAL_PORT to $REMOTE_PORT"
-        # autossh -M 0 -f -N -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -R $REMOTE_PORT:localhost:$LOCAL_PORT $USER@$HOST
+        autossh -M 0 -f -N -o "ServerAliveInterval 7200" -o "ServerAliveCountMax 12" -R $REMOTE_PORT:localhost:$LOCAL_PORT $USER@$HOST
     fi
 done
-
-tail -f /dev/null # To keep container opened

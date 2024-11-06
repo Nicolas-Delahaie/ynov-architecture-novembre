@@ -13,7 +13,8 @@ const Port = sequelize.define('Port', {
         type: DataTypes.INTEGER,
         allowNull: false
     }
-});
+}, { tableName: 'ports' });
+
 Port.belongsTo(MacAddress, {
     foreignKey: {
         name: 'macAddressId',

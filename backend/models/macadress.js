@@ -13,6 +13,6 @@ const MacAdresse = sequelize.define('MacAdresse', {
         allowNull: false,
         unique: true
     }
-});
+}, { tableName: 'macadresses' });
 
 module.exports = MacAdresse;

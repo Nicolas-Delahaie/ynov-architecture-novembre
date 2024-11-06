@@ -1,6 +1,8 @@
 const { Sequelize } = require('sequelize');
 
-// Créer une instance Sequelize
-const sequelize = new Sequelize('mysql://root:root@localhost:3306/archi');
+const sequelize = new Sequelize('archi', 'root', 'root', {
+    host: 'localhost',
+    dialect: 'mysql',
+});
 
 module.exports = sequelize;

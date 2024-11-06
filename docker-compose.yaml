@@ -2,7 +2,7 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./backend:/usr/share/nginx/html
     depends_on:
       - mysql
@@ -34,20 +34,14 @@ services:
       - mysql
 
   rasp1:
+    volumes:
+      - ./docker/raspberry_local_ports:/etc/airnet/ports
+      - ./scripts/register.sh:/workspace/register.sh
     build:
-      dockerfile: ./Dockerfile-raspberry
+      dockerfile: ./docker/Dockerfile-raspberry
     depends_on:
       - nginx
-  rasp2:
-    build:
-      dockerfile: ./Dockerfile-raspberry
-    depends_on:
-      - nginx
-  rasp3:
-    build:
-      dockerfile: ./Dockerfile-raspberry
-    depends_on:
-      - nginx
+    command: ["sh", "-c", "/workspace/register.sh && tail -f /dev/null"]
 
 volumes:
   db-data:

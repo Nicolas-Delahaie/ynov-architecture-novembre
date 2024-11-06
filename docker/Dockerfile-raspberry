@@ -6,7 +6,5 @@ RUN apt-get update && \
     apt-get install -y curl
 
 WORKDIR /workspace
-EXPOSE 80
-COPY ./register.sh /workspace/
 
-CMD ["/workspace/register.sh"]
+EXPOSE 80

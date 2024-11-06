@@ -3,7 +3,8 @@ FROM debian:stable-slim
 
 RUN apt-get update && \
     apt-get install -y lsof && \
-    apt-get install -y curl
+    apt-get install -y curl &&\
+    apt-get install -y autossh
 
 WORKDIR /workspace
 

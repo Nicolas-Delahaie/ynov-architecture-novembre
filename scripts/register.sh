@@ -29,6 +29,6 @@ for i in "${!LOCAL_PORTS[@]}"; do
     if lsof -Pi :$LOCAL_PORT -sTCP:LISTEN -t >/dev/null ; then
         echo "Local port $LOCAL_PORT is used"
         echo "Creating reverse SSH tunnel for port $LOCAL_PORT to $REMOTE_PORT"
-        # autossh -M 0 -f -N -o "ServerAliveInterval 7200" -o "ServerAliveCountMax 12" -R $REMOTE_PORT:localhost:$LOCAL_PORT $USER@$HOST
+        autossh -M 0 -f -N -o "ServerAliveInterval 7200" -o "ServerAliveCountMax 12" -R $REMOTE_PORT:localhost:$LOCAL_PORT $USER@$HOST
     fi
 done

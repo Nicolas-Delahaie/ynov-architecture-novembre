@@ -14,7 +14,7 @@ router.get('/ports', async (req, res) => {
 });
 
 // Route to add a new port
-router.post('/ports', async (req, res) => {
+router.put('/ports', async (req, res) => {
     const { port, macAddressId } = req.body;
 
     try {

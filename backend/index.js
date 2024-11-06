@@ -1,18 +1,21 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const sequelize = require('./database');
-const port = "3000";
+const port = 3000;
 
 const portRouter = require('./routes/port');
 const macadressRouter = require('./routes/macadress');
 
-app.use("/api", portRouter, macadressRouter);
+app.use(bodyParser.json());
+app.use("/api", portRouter);
+app.use("/api", macadressRouter);
 
 sequelize.sync()
     .then(() => {
         console.log('Database & tables created!');
-        app.listen(3000, () => {
-            console.log('Server is running on port 3000');
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
         });
     })
     .catch(err => {

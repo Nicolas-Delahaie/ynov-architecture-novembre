@@ -6,7 +6,7 @@ const router = express.Router();
 // Route to get all ports
 router.get('/ports', async (req, res) => {
     try {
-        const ports = await Port.find();
+        const ports = await Port.findAll();
         res.json(ports);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -14,7 +14,7 @@ router.get('/ports', async (req, res) => {
 });
 
 // Route to add a new port
-router.put('/ports', async (req, res) => {
+router.post('/ports', async (req, res) => {
     const { port, macAddressId } = req.body;
 
     try {

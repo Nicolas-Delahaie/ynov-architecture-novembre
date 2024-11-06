@@ -1,13 +1,14 @@
 services:
-  nginx:
-    image: nginx:latest
+  backend:
+    image: node:latest
     volumes:
-      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./backend:/usr/share/nginx/html
+      - ./backend:/app
+      # - /app/node_modules #Ignore node modules
     depends_on:
       - mysql
     ports:
-      - 80:80
+      - 80:3000
+    command: ["sh", "-c", "node /app/index.js"]
 
   mysql:
     image: mysql:latest
@@ -40,7 +41,7 @@ services:
     build:
       dockerfile: ./docker/Dockerfile-raspberry
     depends_on:
-      - nginx
+      - backend
     command: ["sh", "-c", "/workspace/register.sh && tail -f /dev/null"]
 
 volumes:

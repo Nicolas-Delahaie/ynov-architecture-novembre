@@ -1,16 +1,16 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
 
-const Raspberry = sequelize.define('Raspberry', {
+const Raspberry = sequelize.define('raspberry', {
     mac: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true
     },
-    LastUsed: {
+    lastUsed: {
         type: DataTypes.DATE,
         allowNull: false,
     },
-}, { tableName: 'Raspberry' });
+}, { tableName: 'raspberries' });
 
 module.exports = Raspberry;

@@ -40,10 +40,10 @@ router.put('/raspberryPorts/cleanup/:days', async (req, res) => {
         const dateClean = new Date();
         dateClean.setDate(dateClean.getDate() - days);
 
-        // Trouver tous les Raspberry dont la date LastUsed est supérieure à 2 jours
+        // Trouver tous les Raspberry dont la date lastUsed est supérieure à 2 jours
         const obsoleteRaspberries = await Raspberry.findAll({
             where: {
-                LastUsed: {
+                lastUsed: {
                     [Op.lt]: dateClean
                 }
             }

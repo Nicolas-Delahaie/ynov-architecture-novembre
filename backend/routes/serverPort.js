@@ -3,6 +3,18 @@ const ServerPort = require("../models/serverPort");
 // const { Op } = require("sequelize");
 const router = express.Router();
 
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Register a new server port
+ *     tags: [ServerPort]
+ *     responses:
+ *       201:
+ *         description: Server port registered successfully
+ *       400:
+ *         description: Bad request
+ */
 router.post("/register", async (req, res) => {
     try {
         // const unusedPorts = await ServerPort.findAll({
@@ -24,6 +36,24 @@ router.post("/register", async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /ports:
+ *   get:
+ *     summary: Get all server ports
+ *     tags: [ServerPort]
+ *     responses:
+ *       200:
+ *         description: The list of all server ports
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ServerPort'
+ *       500:
+ *         description: Internal server error
+ */
 router.get("/ports", async (req, res) => {
     try {
         const ports = await ServerPort.findAll();

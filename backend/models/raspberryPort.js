@@ -3,7 +3,27 @@ const sequelize = require("../database");
 const Raspberry = require("./raspberry");
 const ServerPort = require("./serverPort");
 
-// Définir le modèle RaspberryPort
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     RaspberryPort:
+ *       type: object
+ *       required:
+ *         - port
+ *         - raspberryMac
+ *         - serverPort
+ *       properties:
+ *         port:
+ *           type: integer
+ *           description: The port number
+ *         raspberryMac:
+ *           type: string
+ *           description: The MAC address of the Raspberry
+ *         serverPort:
+ *           type: integer
+ *           description: The server port number
+ */
 const RaspberryPort = sequelize.define(
     "raspberryPort",
     {

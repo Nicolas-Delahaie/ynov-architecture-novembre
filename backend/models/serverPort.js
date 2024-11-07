@@ -1,7 +1,19 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../database");
 
-// Définir le modèle ServerPort
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     ServerPort:
+ *       type: object
+ *       required:
+ *         - port
+ *       properties:
+ *         port:
+ *           type: integer
+ *           description: The port number
+ */
 const ServerPort = sequelize.define(
     "serverPort",
     {

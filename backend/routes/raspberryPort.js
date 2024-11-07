@@ -5,7 +5,24 @@ const { Op } = require('sequelize');
 
 const router = express.Router();
 
-// Route to get all RaspberryPorts
+/**
+ * @swagger
+ * /raspberryPorts:
+ *   get:
+ *     summary: Get all RaspberryPorts
+ *     tags: [RaspberryPort]
+ *     responses:
+ *       200:
+ *         description: The list of all RaspberryPorts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/RaspberryPort'
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/raspberryPorts', async (req, res) => {
     try {
         const raspberryPorts = await RaspberryPort.findAll();
@@ -15,7 +32,31 @@ router.get('/raspberryPorts', async (req, res) => {
     }
 });
 
-// Route to get raspberry ports by mac address
+/**
+ * @swagger
+ * /raspberryPorts/{mac}:
+ *   get:
+ *     summary: Get RaspberryPorts by MAC address
+ *     tags: [RaspberryPort]
+ *     parameters:
+ *       - in: path
+ *         name: mac
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The MAC address of the Raspberry
+ *     responses:
+ *       200:
+ *         description: The list of RaspberryPorts for the specified MAC address
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/RaspberryPort'
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/raspberryPorts/:mac', async (req, res) => {
     try {
         const raspberryPorts = await RaspberryPort.findAll({
@@ -29,7 +70,27 @@ router.get('/raspberryPorts/:mac', async (req, res) => {
     }
 });
 
-// Route to clean serverPort references in RaspberryPort
+/**
+ * @swagger
+ * /raspberryPorts/cleanup/{days}:
+ *   put:
+ *     summary: Clean serverPort references in RaspberryPort
+ *     tags: [RaspberryPort]
+ *     parameters:
+ *       - in: path
+ *         name: days
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Number of days to check for obsolete entries
+ *     responses:
+ *       200:
+ *         description: Obsolete serverPort references set to NULL successfully
+ *       400:
+ *         description: Invalid number of days
+ *       500:
+ *         description: Internal server error
+ */
 router.put('/raspberryPorts/cleanup/:days', async (req, res) => {
     try {
         const days = parseInt(req.params.days);

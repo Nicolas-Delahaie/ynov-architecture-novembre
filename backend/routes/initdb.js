@@ -3,7 +3,23 @@ const sequelize = require("./../database");
 
 const router = express.Router();
 
-// Route to get all RaspberryPorts
+/**
+ * @swagger
+ * /initdb:
+ *   post:
+ *     summary: Initialize the database
+ *     tags: [InitDB]
+ *     responses:
+ *       200:
+ *         description: Database is synchronizing in background
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: Database is synchronizing in background (follow steps in the container console)
+ *       500:
+ *         description: Internal server error
+ */
 router.post("/initdb", (req, res) => {
     initdb();
     res.status(200).json("Database is synchronizing in background (follow steps in the container console)");

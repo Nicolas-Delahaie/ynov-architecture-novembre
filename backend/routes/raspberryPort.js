@@ -30,16 +30,21 @@ router.get('/raspberryPorts/:mac', async (req, res) => {
 });
 
 // Route to clean serverPort references in RaspberryPort
-router.put('/raspberryPorts/cleanup', async (req, res) => {
+router.put('/raspberryPorts/cleanup/:days', async (req, res) => {
     try {
-        const twoDaysAgo = new Date();
-        twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+        const days = parseInt(req.params.days);
+        if (isNaN(days) || days < 0) {
+            return res.status(400).json({ message: 'Invalid days parameter' });
+        }
+
+        const dateClean = new Date();
+        dateClean.setDate(dateClean.getDate() - days);
 
         // Trouver tous les Raspberry dont la date LastUsed est supérieure à 2 jours
         const obsoleteRaspberries = await Raspberry.findAll({
             where: {
                 LastUsed: {
-                    [Op.lt]: twoDaysAgo
+                    [Op.lt]: dateClean
                 }
             }
         });

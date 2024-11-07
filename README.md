@@ -17,6 +17,6 @@ L'authentification se fait uniquement sur chaque Raspberry.
 
 -   A la racine du projet, executer `docker compose up --build`.
 
--   Générer la structure de la db en faisant un CALL API
+-   Générer la structure de la db en appelant en POST /initdb
 
 -   Dans le container, executer `npx sequelize-cli db:seed:all` (Si des donénes existent déjà, les supprimer avec `npx sequelize-cli db:seed:undo:all`)

@@ -5,6 +5,31 @@ const { Op } = require('sequelize');
 
 const router = express.Router();
 
+// Route to get all RaspberryPorts
+router.get('/raspberryPorts', async (req, res) => {
+    try {
+        const raspberryPorts = await RaspberryPort.findAll();
+        res.json(raspberryPorts);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Route to get raspberry ports by mac address
+router.get('/raspberryPorts/:mac', async (req, res) => {
+    try {
+        const raspberryPorts = await RaspberryPort.findAll({
+            where: {
+                raspberryMac: req.params.mac
+            }
+        });
+        res.json(raspberryPorts);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Route to clean serverPort references in RaspberryPort
 router.put('/raspberryPorts/cleanup', async (req, res) => {
     try {
         const twoDaysAgo = new Date();

@@ -1,10 +1,16 @@
-# Raspberry image
-FROM debian:stable-slim
+## UPDATE 07/11/2024 - Alan BEL
+## Switch from DEBIAN to NGINX to have web servers instead of machines
+FROM nginx:stable-alpine
 
-RUN apt-get update && \
-    apt-get install -y \
-    lsof \
-    curl \
-    autossh
+RUN apk update && \
+    apk add --no-cache lsof curl autossh
+
+# Remove the default NGINX configuration because it conflicts with server1 & server2 configurations.
+# This problem occurs when ports 9090:9090 and 9091:9091 are used.
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy the configuration & html files
+COPY nginx/conf /etc/nginx/conf.d
+COPY nginx/html /usr/share/nginx/html
 
 WORKDIR /workspace

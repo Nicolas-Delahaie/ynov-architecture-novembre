@@ -1,51 +1,52 @@
 services:
-    backend:
-        image: node:latest
-        working_dir: /app
-        volumes:
-            - ./backend:/app
-            # - /app/node_modules #Ignore node modules
-        depends_on:
-            - mysql
-        ports:
-            - 80:3000
-        command: "npx nodemon -L --inspect index.js"
+  backend:
+    image: node:latest
+    volumes:
+      - ./backend:/app
+      # - /app/node_modules #Ignore node modules
+    depends_on:
+      - mysql
+    ports:
+      - 80:3000
+    command: ["sh", "-c", "node /app/index.js"]
 
-    mysql:
-        image: mysql:latest
-        environment:
-            MYSQL_DATABASE: ${DATABASE_NAME}
-            MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
-        ports:
-            - 3306:3306
-        healthcheck:
-            test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=${DATABASE_ROOT_PASSWORD}"]
-            timeout: 5s
-            retries: 5
-            start_period: 60s
-        volumes:
-            - db-data:/var/lib/mysql
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=${DATABASE_ROOT_PASSWORD}"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    volumes:
+      - db-data:/var/lib/mysql
 
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin:latest
-        environment:
-            PMA_HOST: mysql
-            PMA_USER: root
-            PMA_PASSWORD: ${DATABASE_ROOT_PASSWORD}
-        ports:
-            - 8080:80
-        depends_on:
-            - mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+    ports:
+      - 8080:80
+    depends_on:
+      - mysql
 
-    rasp1:
-        volumes:
-            - ./docker/raspberry_local_ports:/etc/airnet/ports
-            - ./scripts/register.sh:/workspace/register.sh
-        build:
-            dockerfile: ./docker/Dockerfile-raspberry
-        depends_on:
-            - backend
-        command: ["sh", "-c", "/workspace/register.sh && tail -f /dev/null"]
+  rasp1:
+    volumes:
+      - ./docker/raspberry_local_ports:/etc/airnet/ports
+      - ./scripts/register.sh:/workspace/register.sh
+    ports:
+      - 9090:9090
+      - 9091:9091
+    build:
+      dockerfile: ./docker/Dockerfile-raspberry
+    depends_on:
+      - backend
 
 volumes:
-    db-data:
+  db-data:

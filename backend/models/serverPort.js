@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
-const RaspberryPort = require('./raspberryPort');
 
 // Définir le modèle ServerPort
 const ServerPort = sequelize.define('ServerPort', {

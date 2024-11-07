@@ -5,4 +5,4 @@ const sequelize = new Sequelize('archi', 'root', 'root', {
     dialect: 'mysql',
 });
 
-module.exports = sequelize;
+module.exports = sequelize; 

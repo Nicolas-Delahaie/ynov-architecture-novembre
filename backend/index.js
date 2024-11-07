@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
-const sequelize = require("./database");
+const initdb = require("./routes/initdb");
 const serverPort = require("./routes/serverPort");
 const raspberryPort = require("./routes/raspberryPort");
 const port = 3000;
@@ -11,7 +11,7 @@ const port = 3000;
 const app = express();
 
 app.use(bodyParser.json());
-app.use("/api", serverPort, raspberryPort);
+app.use("/api", serverPort, raspberryPort, initdb);
 
 const swaggerOptions = {
     definition: {
@@ -33,15 +33,6 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-
-sequelize
-    .sync()
-    .then(() => {
-        console.log("Database & tables created!");
-        app.listen(port, () => {
-            console.log(`Server is running on port ${port}`);
-        });
-    })
-    .catch((err) => {
-        console.error("Unable to connect to the database:", err);
-    });
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});

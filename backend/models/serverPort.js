@@ -8,16 +8,7 @@ const ServerPort = sequelize.define('ServerPort', {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true
-    },
-    raspberryPort: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: RaspberryPort,
-            key: 'port'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-    },
+    }
 }, { tableName: 'ServerPorts' });
 
 

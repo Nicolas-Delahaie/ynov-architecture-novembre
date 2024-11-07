@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
 const Raspberry = require('./raspberry');
+const ServerPort = require('./serverPort');
 
 // Définir le modèle RaspberryPort
 const RaspberryPort = sequelize.define('RaspberryPort', {
@@ -18,6 +19,15 @@ const RaspberryPort = sequelize.define('RaspberryPort', {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
     },
+    serverPort: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: ServerPort,
+            key: 'port'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+    }
 }, { tableName: 'RaspberryPort' });
 
 

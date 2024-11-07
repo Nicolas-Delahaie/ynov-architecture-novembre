@@ -19,8 +19,8 @@ const ServerPort = sequelize.define(
     {
         port: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             primaryKey: true,
+            autoIncrement: true,
         },
     },
     { timestamps: false }

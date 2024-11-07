@@ -8,6 +8,15 @@ const RaspberryPort = sequelize.define('RaspberryPort', {
         allowNull: false,
         primaryKey: true
     },
+    raspberryMac: {
+        type: DataTypes.STRING,
+        references: {
+            model: 'Raspberry',
+            key: 'mac'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+    }
 }, { tableName: 'RaspberryPort' });
 
 

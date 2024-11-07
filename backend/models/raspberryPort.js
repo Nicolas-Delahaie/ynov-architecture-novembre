@@ -1,8 +1,3 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../database");
-const Raspberry = require("./raspberry");
-const ServerPort = require("./serverPort");
-
 /**
  * @swagger
  * components:
@@ -24,38 +19,37 @@ const ServerPort = require("./serverPort");
  *           type: integer
  *           description: The server port number
  */
-const RaspberryPort = sequelize.define(
-    "raspberryPort",
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        port: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        raspberryMac: {
-            type: DataTypes.STRING,
-            references: {
-                model: Raspberry,
-                key: "mac",
+module.exports = (DataTypes, sequelize) =>
+    sequelize.define(
+        "raspberryPort",
+        {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
             },
-            onUpdate: "CASCADE",
-            onDelete: "CASCADE",
-        },
-        serverPort: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: ServerPort,
-                key: "port",
+            port: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
             },
-            onUpdate: "CASCADE",
-            onDelete: "CASCADE",
+            raspberryMac: {
+                type: DataTypes.STRING,
+                references: {
+                    model: Raspberry,
+                    key: "mac",
+                },
+                onUpdate: "CASCADE",
+                onDelete: "CASCADE",
+            },
+            serverPort: {
+                type: DataTypes.INTEGER,
+                references: {
+                    model: ServerPort,
+                    key: "port",
+                },
+                onUpdate: "CASCADE",
+                onDelete: "CASCADE",
+            },
         },
-    },
-    { timestamps: false }
-);
-
-module.exports = RaspberryPort;
+        { timestamps: false }
+    );

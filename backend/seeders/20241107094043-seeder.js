@@ -1,8 +1,6 @@
 "use strict";
 
-const Raspberry = require("../models/raspberry");
-const RaspberryPort = require("../models/raspberryPort");
-const ServerPort = require("../models/serverPort");
+const { ServerPort, RaspberryPort, Raspberry } = require("../models");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {

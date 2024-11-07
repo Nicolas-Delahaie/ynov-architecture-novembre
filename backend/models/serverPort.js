@@ -1,6 +1,3 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../database");
-
 /**
  * @swagger
  * components:
@@ -14,16 +11,15 @@ const sequelize = require("../database");
  *           type: integer
  *           description: The port number
  */
-const ServerPort = sequelize.define(
-    "serverPort",
-    {
-        port: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
+module.exports = (DataTypes, sequelize) =>
+    sequelize.define(
+        "serverPort",
+        {
+            port: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+            },
         },
-    },
-    { timestamps: false }
-);
-
-module.exports = ServerPort;
+        { timestamps: false }
+    );

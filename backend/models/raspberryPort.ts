@@ -1,3 +1,7 @@
+import { DataTypes, Sequelize, ModelCtor, Model } from "sequelize";
+import { T_Model } from "./";
+let RaspberryPort: T_Model;
+
 /**
  * @swagger
  * components:
@@ -19,8 +23,9 @@
  *           type: integer
  *           description: The server port number
  */
-module.exports = (DataTypes, sequelize) =>
-    sequelize.define(
+
+export const initModel = (sequelize: Sequelize) => {
+    RaspberryPort = sequelize.define(
         "raspberryPort",
         {
             id: {
@@ -30,26 +35,10 @@ module.exports = (DataTypes, sequelize) =>
             },
             port: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
-            },
-            raspberryMac: {
-                type: DataTypes.STRING,
-                references: {
-                    model: Raspberry,
-                    key: "mac",
-                },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE",
-            },
-            serverPort: {
-                type: DataTypes.INTEGER,
-                references: {
-                    model: ServerPort,
-                    key: "port",
-                },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE",
             },
         },
         { timestamps: false }
     );
+};
+
+export { RaspberryPort };

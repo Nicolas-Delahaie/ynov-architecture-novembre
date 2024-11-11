@@ -1,3 +1,7 @@
+import { DataTypes, Sequelize, ModelCtor, Model } from "sequelize";
+import { T_Model } from "./";
+let ServerPort: T_Model;
+
 /**
  * @swagger
  * components:
@@ -11,8 +15,9 @@
  *           type: integer
  *           description: The port number
  */
-module.exports = (DataTypes, sequelize) =>
-    sequelize.define(
+
+export const initModel = (sequelize: Sequelize) => {
+    ServerPort = sequelize.define(
         "serverPort",
         {
             port: {
@@ -23,3 +28,6 @@ module.exports = (DataTypes, sequelize) =>
         },
         { timestamps: false }
     );
+};
+
+export { ServerPort };

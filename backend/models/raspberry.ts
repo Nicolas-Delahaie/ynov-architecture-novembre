@@ -1,3 +1,7 @@
+import { DataTypes, Sequelize, ModelCtor, Model } from "sequelize";
+import { T_Model } from "./";
+let Raspberry: T_Model;
+
 /**
  * @swagger
  * components:
@@ -16,8 +20,8 @@
  *           format: date-time
  *           description: The last used date of the Raspberry
  */
-module.exports = (DataTypes, sequelize) =>
-    sequelize.define(
+export const initModel = (sequelize: Sequelize) => {
+    Raspberry = sequelize.define(
         "raspberry",
         {
             mac: {
@@ -27,8 +31,10 @@ module.exports = (DataTypes, sequelize) =>
             },
             lastUsed: {
                 type: DataTypes.DATE,
-                allowNull: false,
             },
         },
         { tableName: "raspberries" }
     );
+};
+
+export { Raspberry };

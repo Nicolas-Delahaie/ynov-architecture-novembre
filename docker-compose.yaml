@@ -9,7 +9,7 @@ services:
             - mysql
         ports:
             - 80:80
-        command: "npx ts-node-dev --respawn index.js"
+        command: "npx ts-node-dev --respawn --transpile-only --poll index.js"
 
     mysql:
         image: mysql:latest

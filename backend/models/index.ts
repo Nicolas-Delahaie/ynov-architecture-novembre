@@ -1,17 +1,20 @@
-const { DataTypes, Sequelize } = require("sequelize");
+import { initializeRelations } from "./initializeRelations";
+import { Raspberry, initModel as initModel1 } from "./raspberry";
+import { RaspberryPort, initModel as initModel2 } from "./raspberryPort";
+import { ServerPort, initModel as initMode3 } from "./serverPort";
+import { Sequelize, ModelCtor, Model } from "sequelize";
+
+export type T_Model = ModelCtor<Model<any, any>>;
 
 const sequelize = new Sequelize("archi", "root", "root", {
     host: "mysql",
     dialect: "mysql",
 });
 
-const Raspberry = require("./raspberry")(DataTypes, sequelize);
-const RaspberryPort = require("./raspberryPort")(DataTypes, sequelize);
-const ServerPort = require("./serverPort")(DataTypes, sequelize);
+initModel1(sequelize);
+initModel2(sequelize);
+initMode3(sequelize);
 
-module.exports = {
-    sequelize,
-    Raspberry,
-    RaspberryPort,
-    ServerPort,
-};
+initializeRelations({ Raspberry, RaspberryPort, ServerPort });
+
+export { sequelize, Raspberry, RaspberryPort, ServerPort };

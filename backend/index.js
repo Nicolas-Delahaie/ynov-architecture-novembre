@@ -7,7 +7,7 @@ const cors = require("cors");
 const initdb = require("./routes/initdb");
 const serverPort = require("./routes/serverPort");
 const raspberryPort = require("./routes/raspberryPort");
-const port = 3000;
+const port = 80;
 
 const app = express();
 
@@ -26,7 +26,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://localhost:3000/api",
+                url: "http://localhost",
             },
         ],
     },

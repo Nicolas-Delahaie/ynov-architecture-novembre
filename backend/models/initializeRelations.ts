@@ -9,6 +9,6 @@ type T_Models = {
 export const initializeRelations = (models: T_Models) => {
     const { Raspberry, ServerPort, RaspberryPort } = models;
 
-    // ServerPort.hasOne(RaspberryPort);
-    // RaspberryPort.hasOne(ServerPort);
+    RaspberryPort.belongsTo(Raspberry);
+    RaspberryPort.belongsTo(ServerPort);
 };

@@ -10,5 +10,5 @@ export const initializeRelations = (models: T_Models) => {
     const { Raspberry, ServerPort, RaspberryPort } = models;
 
     RaspberryPort.belongsTo(Raspberry);
-    RaspberryPort.belongsTo(ServerPort);
+    RaspberryPort.hasOne(ServerPort); // Impossible de le mettre en unique...
 };

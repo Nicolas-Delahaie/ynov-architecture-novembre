@@ -36,6 +36,9 @@ export const initModel = (sequelize: Sequelize) => {
             port: {
                 type: DataTypes.INTEGER,
             },
+            type: {
+                type: DataTypes.STRING,
+            },
         },
         { timestamps: false }
     );

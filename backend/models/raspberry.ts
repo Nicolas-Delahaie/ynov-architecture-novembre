@@ -26,8 +26,10 @@ export const initModel = (sequelize: Sequelize) => {
         {
             mac: {
                 type: DataTypes.STRING,
-                allowNull: false,
                 primaryKey: true,
+            },
+            sshKey: {
+                type: DataTypes.STRING,
             },
             lastUsed: {
                 type: DataTypes.DATE,

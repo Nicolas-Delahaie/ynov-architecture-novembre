@@ -1,10 +1,11 @@
 import express, { Request } from "express";
-import { RaspberryPort, ServerPort } from "../models";
+import { Raspberry, RaspberryPort, ServerPort } from "../models";
+import sequelize from "sequelize";
 const router = express.Router();
 
 interface RegisterBody {
     mac?: string;
-    raspberryPorts?: { type: string; port: number }[];
+    raspberryPorts?: string;
 }
 
 /**
@@ -21,7 +22,9 @@ interface RegisterBody {
  */
 router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
     try {
-        const { mac, raspberryPorts } = req.body;
+        const body = req.body;
+        const mac = body?.mac;
+        const raspberryPortsToCreate = body.raspberryPorts?.split(",");
 
         // Checking props
         if (!mac) {
@@ -29,40 +32,46 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
             return;
         }
 
-        if (!raspberryPorts) {
+        if (!raspberryPortsToCreate) {
             res.status(400).json("Missing prop : raspberryPorts");
             return;
         }
-
         if (mac === "") {
             res.status(400).json("Bad prop : mac empty");
             return;
         }
-        if (raspberryPorts.length === 0) {
+        if (raspberryPortsToCreate.length === 0) {
             res.status(400).json("Bad prop : raspberryPorts empty");
             return;
         }
+
+        // Creating raspberry
+        Raspberry.findOrCreate({
+            where: { mac },
+            defaults: { sshKey: "coucou", lastUsed: new Date(), createdAt: new Date(), updatedAt: new Date() },
+        });
 
         // Checking if raspberryPorts already exists
         // ...
 
         // Creating raspberryPorts
-        const createdRaspberryPorts = await RaspberryPort.bulkCreate(
+        const raspberryPorts = await RaspberryPort.bulkCreate(
             // Adding raspberryMac to each port
-            raspberryPorts.map((port) => ({
-                ...port,
+            raspberryPortsToCreate.map((port) => ({
+                port,
+                type: "http", // Retirer ou adapter le type
                 raspberryMac: mac,
             }))
         );
 
         // Creating server ports in dba
-        const serverPorts = await ServerPort.bulkCreate(
-            createdRaspberryPorts.map((raspberryPort) => ({
-                raspberryPortId: raspberryPort.getDataValue("id"),
-            }))
-        );
+        const serverPortsToCreate = raspberryPorts.map((raspberryPort) => ({
+            raspberryPortId: raspberryPort.getDataValue("id") as number,
+        }));
+        const serverPorts = await ServerPort.bulkCreate(serverPortsToCreate);
 
-        res.status(200).json(serverPorts.map((port) => port.toJSON()));
+        // Result
+        res.status(200).json(serverPorts.map((serverPort) => serverPort.getDataValue("port") as string).join(","));
     } catch (error) {
         res.status(400).json({
             error: {

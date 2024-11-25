@@ -12,6 +12,11 @@ echo "Local ports: $LOCAL_PORTS"
 # Get ports from API with the user agent and the mac address
 echo "Getting ports from API: $API_REGISTER_ENDPOINT, mac=$MAC, ports=$LOCAL_PORTS"
 REMOTE_PORTS=$(curl -X POST -d "mac=$MAC&raspberryPorts=$LOCAL_PORTS" -A "AirNet/1.0" $API_REGISTER_ENDPOINT)
+if [ $? -ne 0 ]; then
+  echo "Error: Unable to fetch $API_REGISTER_ENDPOINT"
+  echo "Exiting script."
+  exit 1
+fi
 echo "Remote ports: $REMOTE_PORTS"
 
 # create an array of ports

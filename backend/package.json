@@ -20,5 +20,6 @@
     },
     "devDependencies": {
         "sequelize-cli": "^6.6.2"
-    }
+    },
+    "proxy": "http://localhost:3000"
 }

@@ -11,12 +11,17 @@ const port = 3000;
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,POST,PUT,DELETE', 
+    allowedHeaders: 'Content-Type, Authorization', 
+  }));
+  
 
 app.use(bodyParser.json());
 app.use("/api", serverPort, raspberryPort, initdb);
 
-const swaggerOptions = {
+const swaggerOptions = {    
     definition: {
         openapi: "3.0.0",
         info: {

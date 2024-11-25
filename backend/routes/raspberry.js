@@ -1,5 +1,5 @@
 const express = require("express");
-const Raspberry = require("../models/raspberry");
+const { Raspberry } = require("../models");
 const router = express.Router();
 
 /**

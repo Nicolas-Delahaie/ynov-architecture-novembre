@@ -8,8 +8,8 @@ services:
         depends_on:
             - mysql
         ports:
-            - 80:3000
-        command: "npx nodemon -L --inspect index.js"
+            - 80:80
+        command: "npx ts-node-dev --respawn --transpile-only --poll index.js"
 
     mysql:
         image: mysql:latest

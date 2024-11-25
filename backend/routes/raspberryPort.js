@@ -1,6 +1,5 @@
 const express = require('express');
-const RaspberryPort = require('../models/raspberryPort');
-const Raspberry = require('../models/raspberry');
+const { RaspberryPort, Raspberry } = require("../models");
 const { Op } = require('sequelize');
 
 const router = express.Router();

@@ -28,6 +28,7 @@ router.get('/raspberryPorts', async (req, res) => {
         res.json(raspberryPorts);
     } catch (err) {
         res.status(500).json({ message: err.message });
+        console.log(err);
     }
 });
 

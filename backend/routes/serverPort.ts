@@ -1,6 +1,11 @@
-import express from "express";
-const { sequelize, RaspberryPort, Raspberry, ServerPort } = require("../models");
+import express, { Request } from "express";
+import { RaspberryPort, ServerPort } from "../models";
 const router = express.Router();
+
+interface RegisterBody {
+    mac?: string;
+    raspberryPorts?: { type: string; port: number }[];
+}
 
 /**
  * @swagger
@@ -14,24 +19,61 @@ const router = express.Router();
  *       400:
  *         description: Bad request
  */
-router.post("/register", async (req, res) => {
+router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
     try {
-        // const unusedPorts = await ServerPort.findAll({
-        //     where: {
-        //         foreignKeyId: {
-        //             [Op.ne]: null, // Sequelize.Op.ne signifie "not equal" (pas égal à)
-        //         },
-        //     },
-        // });
-        // Get not used created ports
+        const { mac, raspberryPorts } = req.body;
 
-        // If not enough, create more
+        // Checking props
+        if (!mac) {
+            res.status(400).json("Missing prop : mac");
+            return;
+        }
 
-        // Assign each server port with each raspberry port
+        if (!raspberryPorts) {
+            res.status(400).json("Missing prop : raspberryPorts");
+            return;
+        }
 
-        res.status(201).json(1);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
+        if (mac === "") {
+            res.status(400).json("Bad prop : mac empty");
+            return;
+        }
+        if (raspberryPorts.length === 0) {
+            res.status(400).json("Bad prop : raspberryPorts empty");
+            return;
+        }
+
+        // Checking if raspberryPorts already exists
+        // ...
+
+        // Creating raspberryPorts
+        const createdRaspberryPorts = await RaspberryPort.bulkCreate(
+            // Adding raspberryMac to each port
+            raspberryPorts.map((port) => ({
+                ...port,
+                raspberryMac: mac,
+            }))
+        );
+
+        // Creating server ports in dba
+        const serverPorts = await ServerPort.bulkCreate(
+            createdRaspberryPorts.map((raspberryPort) => ({
+                raspberryPortId: raspberryPort.getDataValue("id"),
+            }))
+        );
+
+        res.status(200).json(serverPorts.map((port) => port.toJSON()));
+    } catch (error) {
+        res.status(400).json({
+            error: {
+                name: (error as any).name,
+                message: (error as any).message,
+                stack: (error as any).stack,
+                errors: (error as any).errors?.map((err: any) => {
+                    return `Propriété : ${err.path}, Erreur : ${err.message}`;
+                }),
+            },
+        });
     }
 });
 
@@ -58,7 +100,7 @@ router.get("/ports", async (req, res) => {
         const ports = await ServerPort.findAll();
         res.json(ports);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: (err as any).message });
     }
 });
 

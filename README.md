@@ -34,7 +34,7 @@ Contient les fichiers de configuration du projet.
 - **`serverPort.ts`** : Route pour les ports de serveur.
 
 ### `seeders/`
-Contient les scripts pour insérer des données initiales dans la base de données.
+- Contient les scripts pour insérer des données initiales dans la base de données.
 
 ### `scripts/`
 - **`register.sh`** : Script shell pour enregistrer ou configurer des dépendances ou services.

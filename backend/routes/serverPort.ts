@@ -57,11 +57,14 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
         // Creating raspberryPorts
         const raspberryPorts = await RaspberryPort.bulkCreate(
             // Adding raspberryMac to each port
-            raspberryPortsToCreate.map((port) => ({
-                port,
-                type: "http", // Retirer ou adapter le type
-                raspberryMac: mac,
-            }))
+            raspberryPortsToCreate.map((port) => {
+                const cleanedPort = port.replace(":", "");
+                return {
+                    port: cleanedPort,
+                    type: cleanedPort === port ? "http" : "TCP",
+                    raspberryMac: mac,
+                };
+            })
         );
 
         // Creating server ports in dba

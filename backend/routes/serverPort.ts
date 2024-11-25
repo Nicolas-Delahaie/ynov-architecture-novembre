@@ -68,10 +68,12 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
         const serverPortsToCreate = raspberryPorts.map((raspberryPort) => ({
             raspberryPortId: raspberryPort.getDataValue("id") as number,
         }));
-        const serverPorts = await ServerPort.bulkCreate(serverPortsToCreate);
+        const serverPorts = (await ServerPort.bulkCreate(serverPortsToCreate)).map(
+            (serverPort) => serverPort.getDataValue("port") as string
+        );
 
         // Result
-        res.status(200).json(serverPorts.map((serverPort) => serverPort.getDataValue("port") as string).join(","));
+        res.status(200).send(serverPorts.join(","));
     } catch (error) {
         res.status(400).json({
             error: {

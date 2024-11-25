@@ -1,9 +1,7 @@
-# Start
-
-> Lien du Trello pour la répartition des tâches : https://trello.com/b/exeUFmex/architecture-logicielle
 > Projet en équipe de 4  
 > Débuté le 5 novembre en architecture logicielle
 
+Lien du Trello pour la répartition des tâches : https://trello.com/b/exeUFmex/architecture-logicielle
 
 # Explications
 

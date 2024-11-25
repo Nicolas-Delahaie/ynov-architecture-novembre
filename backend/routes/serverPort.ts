@@ -61,7 +61,7 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
                 const cleanedPort = port.replace(":", "");
                 return {
                     port: cleanedPort,
-                    type: cleanedPort === port ? "http" : "TCP",
+                    type: cleanedPort === port ? "HTTP" : "TCP",
                     raspberryMac: mac,
                 };
             })

@@ -39,11 +39,11 @@ services:
 
     rasp1:
         volumes:
-            - ./docker/raspberry_local_ports:/etc/airnet/ports
-            - ./scripts/register.sh:/workspace/register.sh
-            - ./docker/nginx.conf:/etc/nginx/nginx.conf
+            - ./raspberry/raspberry_local_ports:/etc/airnet/ports
+            - ./raspberry/register.sh:/workspace/register.sh
+            - ./raspberry/nginx.conf:/etc/nginx/nginx.conf
         build:
-            dockerfile: ./docker/Dockerfile-raspberry
+            dockerfile: ./raspberry/Dockerfile
         depends_on:
             - backend
 

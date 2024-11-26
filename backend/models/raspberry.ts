@@ -29,7 +29,7 @@ export const initModel = (sequelize: Sequelize) => {
                 primaryKey: true,
             },
             sshKey: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(600), // ~ pour une clé RSA 2048 bits
             },
             lastUsed: {
                 type: DataTypes.DATE,

@@ -57,7 +57,7 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
         // Creating raspberry
         Raspberry.findOrCreate({
             where: { mac },
-            defaults: { sshKey: "coucou", lastUsed: new Date(), createdAt: new Date(), updatedAt: new Date() },
+            defaults: { sshKey, lastUsed: new Date(), createdAt: new Date(), updatedAt: new Date() },
         });
 
         // Checking if raspberryPorts already exists

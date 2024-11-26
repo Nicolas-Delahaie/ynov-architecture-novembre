@@ -29,6 +29,7 @@ if [[ $HTTP_STATUS -ne 200 ]]; then
   echo "Response: $RESULT"
   exit 1
 fi
+REMOTE_PORTS=$(echo "$REMOTE_PORTS" | tr -d '[]')
 echo "Remote ports: $REMOTE_PORTS"
 
 # create an array of ports

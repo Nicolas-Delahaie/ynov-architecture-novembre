@@ -51,7 +51,7 @@ Fichier pour orchestrer les conteneurs Docker.
 
 ## Docs
 
-Contient la documentation liée au projet.
+Contient la documentation liée au projet, tel que les diagrammes UML.
 
 ## Fichiers de base
 

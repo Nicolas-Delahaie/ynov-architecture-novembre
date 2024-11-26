@@ -1,7 +1,7 @@
 > Projet en équipe de 4  
 > Débuté le 5 novembre en architecture logicielle
 
-Lien du Trello pour la répartition des tâches : https://trello.com/b/exeUFmex/architecture-logicielle
+Lien du Trello pour la répartition des tâches : https://trello.com/b/exeUFmex/architecture-logicielle  
 Lien du Gitlab avec les schémas fonctionnels : https://gitlab.bzctoons.net/-/snippets/75
 
 # Explications

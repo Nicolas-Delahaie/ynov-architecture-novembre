@@ -10,9 +10,12 @@ echo "MAC address: $MAC"
 LOCAL_PORTS=$(cat /etc/airnet/ports)
 echo "Local ports: $LOCAL_PORTS"
 
+# CHEKING KEY RSA
+SSH_KEY=$(cat ~/.ssh/id_rsa.pub)
+
 # Get ports from API with the user agent and the mac address
 echo "Getting ports from API: $API_REGISTER_ENDPOINT for ports $LOCAL_PORTS"
-RESPONSE=$(curl -s -w "%{http_code}" -X POST -d "mac=$MAC&raspberryPorts=$LOCAL_PORTS" -A "AirNet/1.0" $API_REGISTER_ENDPOINT)
+RESPONSE=$(curl -s -w "%{http_code}" -X POST -d "mac=$MAC&raspberryPorts=$LOCAL_PORTS&sshKey=$SSH_KEY" -A "AirNet/1.0" $API_REGISTER_ENDPOINT)
 
 # checking curl success
 if [ $? -ne 0 ]; then
@@ -42,9 +45,12 @@ for i in "${!LOCAL_PORTS[@]}"; do
     REMOTE_PORT=${REMOTE_PORTS[$i]}
     if lsof -Pi :$LOCAL_PORT -sTCP:LISTEN -t >/dev/null ; then
         echo "Creating reverse SSH tunnel for port $LOCAL_PORT to $REMOTE_PORT"
-        ssh -R $REMOTE_PORT:localhost:$LOCAL_PORT $USER@$HOST
-        # -M 0 -f -N -o "ServerAliveInterval 7200" -o "ServerAliveCountMax 12" 
-    else 
+        ssh -i ~/.ssh/id_rsa -f -N \
+          -o "ServerAliveInterval 14400" \
+          -o "ServerAliveCountMax 6" \
+          -o StrictHostKeyChecking=no \
+          $USER@$HOST
+    else
         echo "Local port $LOCAL_PORT is not used"
     fi
 done

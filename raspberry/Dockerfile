@@ -7,4 +7,5 @@ RUN apt-get update && \
     curl \
     autossh
 
-WORKDIR /workspace
+# SSH
+RUN ssh-keygen -f ~/.ssh/id_rsa -N ""

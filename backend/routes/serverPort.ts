@@ -6,6 +6,7 @@ const router = express.Router();
 interface RegisterBody {
     mac?: string;
     raspberryPorts?: string;
+    sshKey?: string;
 }
 
 /**
@@ -25,15 +26,19 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
         const body = req.body;
         const mac = body?.mac;
         const raspberryPortsToCreate = body.raspberryPorts?.split(",");
+        const sshKey = body?.sshKey;
 
         // Checking props
         if (!mac) {
             res.status(400).json("Missing prop : mac");
             return;
         }
-
         if (!raspberryPortsToCreate) {
             res.status(400).json("Missing prop : raspberryPorts");
+            return;
+        }
+        if (!sshKey) {
+            res.status(400).json("Missing prop : sshKey");
             return;
         }
         if (mac === "") {
@@ -44,6 +49,10 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
             res.status(400).json("Bad prop : raspberryPorts empty");
             return;
         }
+        if (sshKey === "") {
+            res.status(400).json("Bad prop : sshKey empty");
+            return;
+        }
 
         // Creating raspberry
         Raspberry.findOrCreate({
@@ -52,7 +61,7 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
         });
 
         // Checking if raspberryPorts already exists
-        // ...
+        // TODO
 
         // Creating raspberryPorts
         const raspberryPorts = await RaspberryPort.bulkCreate(
@@ -74,6 +83,9 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
         const serverPorts = (await ServerPort.bulkCreate(serverPortsToCreate)).map(
             (serverPort) => serverPort.getDataValue("port") as string
         );
+
+        // Adding SSH key to authorized_keys
+        // TODO
 
         // Result
         res.status(200).send(serverPorts.join(","));

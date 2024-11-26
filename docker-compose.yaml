@@ -1,15 +1,13 @@
 services:
     backend:
-        image: node:latest
-        working_dir: /app
+        build:
+            context: ./backend
         volumes:
             - ./backend:/app
-            # - /app/node_modules #Ignore node modules
         depends_on:
             - mysql
         ports:
             - 80:80
-        command: "npx ts-node-dev --respawn --transpile-only --poll index.js"
 
     mysql:
         image: mysql:latest
@@ -40,10 +38,10 @@ services:
     rasp1:
         volumes:
             - ./raspberry/raspberry_local_ports:/etc/airnet/ports
-            - ./raspberry/register.sh:/workspace/register.sh
+            - ./raspberry/register.sh:/register.sh
             - ./raspberry/nginx.conf:/etc/nginx/nginx.conf
         build:
-            dockerfile: ./raspberry/Dockerfile
+            context: ./raspberry
         depends_on:
             - backend
 

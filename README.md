@@ -1,7 +1,8 @@
 > Projet en équipe de 4  
 > Débuté le 5 novembre en architecture logicielle
 
-Lien du Trello pour la répartition des tâches : https://trello.com/b/exeUFmex/architecture-logicielle
+Lien du Trello pour la répartition des tâches : https://trello.com/b/exeUFmex/architecture-logicielle  
+Lien du Gitlab avec les schémas fonctionnels : https://gitlab.bzctoons.net/-/snippets/75
 
 # Explications
 
@@ -16,6 +17,8 @@ L'authentification se fait uniquement sur chaque Raspberry.
 # Structure du Projet
 
 ## Backend
+
+L'api est codée en javascript et typescript
 
 ### `config/`
 Contient les fichiers de configuration du projet.
@@ -49,7 +52,7 @@ Fichier pour orchestrer les conteneurs Docker.
 
 ## Docs
 
-Contient la documentation liée au projet.
+Contient la documentation liée au projet, tel que les diagrammes UML.
 
 ## Fichiers de base
 

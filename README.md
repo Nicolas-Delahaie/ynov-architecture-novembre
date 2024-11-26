@@ -62,7 +62,7 @@ Contient la documentation liée au projet, tel que les diagrammes UML.
 - **`.env`** : Fichier pour les variables d'environnement.
 - **`README.md`** : Documentation du projet.
 
-## Pré-requis
+# Pré-requis
 - Node.js
 - Docker Desktop (version qui inclue docker compose)
 

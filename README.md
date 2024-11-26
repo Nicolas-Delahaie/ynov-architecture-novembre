@@ -17,6 +17,8 @@ L'authentification se fait uniquement sur chaque Raspberry.
 
 ## Backend
 
+L'api est codée en javascript et typescript
+
 ### `config/`
 Contient les fichiers de configuration du projet.
 

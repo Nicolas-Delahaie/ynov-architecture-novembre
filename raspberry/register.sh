@@ -15,7 +15,8 @@ SSH_KEY=$(cat ~/.ssh/id_rsa.pub)
 
 # Get ports from API with the user agent and the mac address
 echo "Getting ports from API: $API_REGISTER_ENDPOINT for ports $LOCAL_PORTS"
-RESPONSE=$(curl -s -w "%{http_code}" -X POST -d "mac=$MAC&raspberryPorts=$LOCAL_PORTS&sshKey=$SSH_KEY" -A "AirNet/1.0" $API_REGISTER_ENDPOINT)
+ENCODED_SSH_KEY=$(echo -n "$SSH_KEY" | jq -sRr @uri)
+RESPONSE=$(curl -s -w "%{http_code}" -X POST -d "mac=$MAC&raspberryPorts=$LOCAL_PORTS&sshKey=$ENCODED_SSH_KEY" -A "AirNet/1.0" $API_REGISTER_ENDPOINT)
 
 # checking curl success
 if [ $? -ne 0 ]; then
@@ -26,13 +27,13 @@ fi
 
 # checking Http response success
 HTTP_STATUS=${RESPONSE: -3}
-REMOTE_PORTS=${RESPONSE::-3} 
+RESPONSE=${RESPONSE::-3} 
 if [[ $HTTP_STATUS -ne 200 ]]; then
   echo "Request failed with status $HTTP_STATUS."
-  echo "Response: $RESULT"
+  echo "Response: $RESPONSE"
   exit 1
 fi
-REMOTE_PORTS=$(echo "$REMOTE_PORTS" | tr -d '[]')
+REMOTE_PORTS=$(echo "$RESPONSE" | tr -d '[]')
 echo "Remote ports: $REMOTE_PORTS"
 
 # create an array of ports

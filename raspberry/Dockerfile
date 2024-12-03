@@ -2,10 +2,12 @@
 FROM nginx:latest
 
 RUN apt-get update && \
-    apt-get install -y \
-    lsof \
+    apt-get install \
+    -y lsof \
     curl \
-    autossh
+    autossh \
+    -y jq
+
 
 # SSH
 RUN ssh-keygen -f ~/.ssh/id_rsa -N ""

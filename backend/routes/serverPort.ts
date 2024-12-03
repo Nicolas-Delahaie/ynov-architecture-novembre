@@ -1,6 +1,6 @@
 import express, { Request } from "express";
 import { Raspberry, RaspberryPort, ServerPort } from "../models";
-import sequelize from "sequelize";
+import fs from "fs";
 const router = express.Router();
 
 interface RegisterBody {
@@ -24,6 +24,7 @@ interface RegisterBody {
 router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
     try {
         const body = req.body;
+
         const mac = body?.mac;
         const raspberryPortsToCreate = body.raspberryPorts?.split(",");
         const sshKey = body?.sshKey;
@@ -55,12 +56,17 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
         }
 
         // Creating raspberry
-        Raspberry.findOrCreate({
+        const [_, isNew] = await Raspberry.findOrCreate({
             where: { mac },
             defaults: { sshKey, lastUsed: new Date(), createdAt: new Date(), updatedAt: new Date() },
         });
 
-        // Checking if raspberryPorts already exists
+        if (isNew) {
+            // Adding sshKey to authorized_keys
+            fs.appendFileSync("/root/.ssh/authorized_keys", sshKey + "\n");
+        }
+
+        // Checking if raspberryPorts already exist
         // TODO
 
         // Creating raspberryPorts
@@ -83,9 +89,6 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
         const serverPorts = (await ServerPort.bulkCreate(serverPortsToCreate)).map(
             (serverPort) => serverPort.getDataValue("port") as string
         );
-
-        // Adding SSH key to authorized_keys
-        // TODO
 
         // Result
         res.status(200).send(serverPorts.join(","));

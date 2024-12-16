@@ -7,6 +7,8 @@ const cors = require("cors");
 const initdb = require("./routes/initdb");
 const serverPort = require("./routes/serverPort");
 const raspberryPort = require("./routes/raspberryPort");
+const healthCheck = require("./routes/healthcheck");
+
 const port = 80;
 
 const app = express();
@@ -21,6 +23,9 @@ app.use(
 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use("/api", healthCheck);
+
 app.use("/api", serverPort, raspberryPort, initdb);
 
 const swaggerOptions = {

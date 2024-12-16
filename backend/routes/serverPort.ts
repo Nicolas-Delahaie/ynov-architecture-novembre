@@ -82,10 +82,30 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
             })
         );
 
+        let currentPort = 10000;
+
+        // Function to ensure port does not already exist in the database
+        const getNextAvailablePort = async () => {
+            let isUnique = false;
+            while (!isUnique) {
+                currentPort++;
+                const existingPort = await ServerPort.findOne({ where: { port: currentPort } });
+                isUnique = !existingPort;
+            }
+            return currentPort;
+        };
+
         // Creating server ports in dba
-        const serverPortsToCreate = raspberryPorts.map((raspberryPort) => ({
-            raspberryPortId: raspberryPort.getDataValue("id") as number,
-        }));
+        const serverPortsToCreate = await Promise.all(
+            raspberryPorts.map(async (raspberryPort) => {
+                const port = await getNextAvailablePort();
+                return {
+                    raspberryPortId: raspberryPort.getDataValue("id") as number,
+                    port
+                };
+            })
+        );
+
         const serverPorts = (await ServerPort.bulkCreate(serverPortsToCreate)).map(
             (serverPort) => serverPort.getDataValue("port") as string
         );

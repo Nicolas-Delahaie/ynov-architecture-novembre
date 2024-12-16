@@ -8,6 +8,11 @@ services:
             - mysql
         ports:
             - 80:80
+        # healthcheck:
+        #     test: curl -f http://localhost/api/health
+        #     interval: 20s
+        #     timeout: 10s
+        #     retries: 5
 
     mysql:
         image: mysql:latest

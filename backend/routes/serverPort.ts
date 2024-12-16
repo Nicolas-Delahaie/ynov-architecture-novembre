@@ -63,7 +63,7 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
 
         if (isNew) {
             // Adding sshKey to authorized_keys
-            fs.appendFileSync("/root/.ssh/authorized_keys", sshKey + "\n");
+            fs.appendFileSync("/root/.ssh/authorized_keys", "\n" + sshKey);
         }
 
         // Checking if raspberryPorts already exist

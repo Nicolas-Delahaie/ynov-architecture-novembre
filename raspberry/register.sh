@@ -46,7 +46,8 @@ for i in "${!LOCAL_PORTS[@]}"; do
     REMOTE_PORT=${REMOTE_PORTS[$i]}
     if lsof -Pi :$LOCAL_PORT -sTCP:LISTEN -t >/dev/null ; then
         echo "Creating reverse SSH tunnel for port $LOCAL_PORT to $REMOTE_PORT"
-        ssh $USER@$HOST \
+        # WARNING autossh doesn't ensure ssh connection worked
+        autossh $USER@$HOST \
           -R $REMOTE_PORT:localhost:$LOCAL_PORT \
           -i ~/.ssh/id_rsa \
           -f -N \

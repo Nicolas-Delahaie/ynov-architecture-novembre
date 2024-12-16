@@ -63,7 +63,7 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
 
         if (isNew) {
             // Adding sshKey to authorized_keys
-            fs.appendFileSync("/root/.ssh/authorized_keys", sshKey + "\n");
+            fs.appendFileSync("/root/.ssh/authorized_keys", "\n" + sshKey);
         }
 
         // Checking if raspberryPorts already exist
@@ -83,9 +83,17 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
         );
 
         // Creating server ports in dba
-        const serverPortsToCreate = raspberryPorts.map((raspberryPort) => ({
-            raspberryPortId: raspberryPort.getDataValue("id") as number,
-        }));
+        let currentPort: number = (await ServerPort.max("port")) || 9999;
+        const serverPortsToCreate = await Promise.all(
+            raspberryPorts.map(async (raspberryPort) => {
+                currentPort++;
+                return {
+                    raspberryPortId: raspberryPort.getDataValue("id") as number,
+                    port: currentPort,
+                };
+            })
+        );
+
         const serverPorts = (await ServerPort.bulkCreate(serverPortsToCreate)).map(
             (serverPort) => serverPort.getDataValue("port") as string
         );

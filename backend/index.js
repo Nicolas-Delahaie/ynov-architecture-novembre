@@ -4,6 +4,7 @@ const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
 
+const index = require("./routes/index");
 const initdb = require("./routes/initdb");
 const serverPort = require("./routes/serverPort");
 const raspberryPort = require("./routes/raspberryPort");
@@ -21,7 +22,7 @@ app.use(
 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use("/api", serverPort, raspberryPort, initdb);
+app.use("/api", serverPort, raspberryPort, initdb, index);
 
 const swaggerOptions = {
     definition: {

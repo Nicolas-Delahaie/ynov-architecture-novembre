@@ -82,7 +82,7 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
             })
         );
 
-        let currentPort = 10000;
+        let currentPort : number = await ServerPort.max("port") || 10000;
 
         // Function to ensure port does not already exist in the database
         const getNextAvailablePort = async () => {

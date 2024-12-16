@@ -11,3 +11,6 @@ RUN apt-get update && \
 
 # SSH
 RUN ssh-keygen -f ~/.ssh/id_rsa -N ""
+
+# Créer le répertoire http2
+RUN mkdir -p /var/www/http2

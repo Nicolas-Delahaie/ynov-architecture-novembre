@@ -56,15 +56,17 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
         }
 
         // Creating raspberry
-        const [_, isNew] = await Raspberry.findOrCreate({
+        await Raspberry.findOrCreate({
             where: { mac },
             defaults: { sshKey, lastUsed: new Date(), createdAt: new Date(), updatedAt: new Date() },
         });
 
-        if (isNew) {
-            // Adding sshKey to authorized_keys
-            fs.appendFileSync("/root/.ssh/authorized_keys", "\n" + sshKey);
-        }
+        const sshKeys = await Raspberry.findAll({
+            attributes: ["sshKey"],
+        });
+
+        const newKeys = sshKeys.map((rasp: unknown) => (rasp as any).sshKey).join("\n");
+        fs.writeFileSync("/root/.ssh/authorized_keys", newKeys);
 
         // Checking if raspberryPorts already exist
         // TODO

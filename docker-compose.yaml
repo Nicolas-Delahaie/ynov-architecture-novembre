@@ -60,6 +60,7 @@ services:
             - ./raspberry/register.sh:/register.sh
             - ./raspberry/nginx.conf:/etc/nginx/nginx.conf
             - ./raspberry/entrypoint.sh:/entrypoint.sh
+            - ./raspberry/index.html:/var/www/http2/index.html
         depends_on:
             - backend
         entrypoint: ["/entrypoint.sh"]

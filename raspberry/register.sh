@@ -71,7 +71,7 @@ for i in "${!LOCAL_PORTS[@]}"; do
         echo "Creating reverse SSH tunnel for port $LOCAL_PORT to $REMOTE_PORT"
         # WARNING autossh doesn't ensure ssh connection worked
         autossh $USER@$HOST \
-          -R $REMOTE_PORT:localhost:$LOCAL_PORT \
+          -R localhost:$REMOTE_PORT:localhost:$LOCAL_PORT \
           -i ~/.ssh/id_rsa \
           -f -N \
           -o "ServerAliveInterval 14400" \

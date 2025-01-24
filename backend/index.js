@@ -42,8 +42,8 @@ const swaggerOptions = {
     apis: ["./routes/*.js", "./models/*.js"],
 };
 
-const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+// const swaggerDocs = swaggerJsdoc(swaggerOptions);
+// app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

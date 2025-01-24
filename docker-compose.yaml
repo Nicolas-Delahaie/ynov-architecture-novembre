@@ -6,13 +6,6 @@ services:
       - ./backend:/app
     depends_on:
       - mysql
-    ports:
-      - 80:80
-    # healthcheck:
-    #     test: curl -f http://localhost/api/health
-    #     interval: 20s
-    #     timeout: 10s
-    #     retries: 5
 
   mysql:
     image: mysql:latest
@@ -21,11 +14,6 @@ services:
       MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
     ports:
       - 3306:3306
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=${DATABASE_ROOT_PASSWORD}"]
-      timeout: 5s
-      retries: 5
-      start_period: 60s
     volumes:
       - db-data:/var/lib/mysql
 
@@ -45,8 +33,13 @@ services:
     command:
       - --api.dashboard=true
       - --api.insecure=true
+      - --entrypoints.web.address=:80
+
+      - --log.level=DEBUG
+      - --providers.http.endpoint=http://backend/api/traefikconfig
+      - --providers.http.pollInterval=10s #60s
     ports:
-      - 81:80
+      - 88:80
       - 8081:8080
       #   - 443:443s
 

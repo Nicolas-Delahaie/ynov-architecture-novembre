@@ -116,6 +116,85 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
     }
 });
 
+router.get("/traefikconfig", async (req, res) => {
+  try {
+    // let config = {
+    //     http: {
+    //         routers: {
+    //             backend: {
+    //                 rule: "Host(`api.local`)",
+    //                 service: "backend",
+    //                 entryPoints: "websecure",
+    //                 tls: true,
+    //             },
+    //             api: {
+    //                 rule: "PathPrefix(`/dashboard`)",
+    //                 service: "api@internal",
+    //                 entryPoints: "dashboard",
+    //             },
+    //         },
+    //         services: {
+    //             backend: {
+    //                 loadBalancer: {
+    //                     servers: [
+    //                         {
+    //                             url: "http://backend:80",
+    //                         },
+    //                     ],
+    //                 },
+    //             },
+    //             raspberries: {
+    //                 loadBalencer: {
+    //                     servers: [
+    //                         {
+    //                             url: "http://backend:10000",
+    //                         },
+    //                         {
+    //                             url: "http://backend:10001",
+    //                         },
+    //                         {
+    //                             url: "http://backend:10002",
+    //                         },
+    //                         {
+    //                             url: "http://backend:10003",
+    //                         },
+    //                     ],
+    //                 },
+    //             },
+    //         },
+    //     },
+    //     entryPoints: {
+    //         web: {
+    //             address: ":80",
+    //         },
+    //         websecure: {
+    //             address: ":443",
+    //         },
+    //     },
+    //     api: {
+    //         dashboard: true,
+    //     },
+    // };
+    // res.status(200).send(YAMLStringify(config, { indent: 4 }));
+
+    let config = fs.readFileSync("/app/traefik/traefik.yaml", "utf8");
+
+    res.setHeader("Content-Type", "text/plain");
+    res.status(200).send(config);
+  } catch (error) {
+    res.status(400).json({
+      error: {
+        name: (error as any).name,
+        message: (error as any).message,
+        stack: (error as any).stack,
+        errors: (error as any).errors?.map((err: any) => {
+          return `Propriété : ${err.path}, Erreur : ${err.message}`;
+        }),
+      },
+    });
+  }
+});
+
 /**
  * @swagger
  * /ports:

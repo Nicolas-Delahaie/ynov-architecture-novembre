@@ -21,9 +21,11 @@ L'authentification se fait uniquement sur chaque Raspberry.
 L'api est codée en javascript et typescript
 
 ### `config/`
+
 Contient les fichiers de configuration du projet.
 
 ### `models/`
+
 - **`index.ts`** : Point d'entrée pour regrouper et exporter les modèles.
 - **`initializeRelations.ts`** : Définit les relations entre les modèles.
 - **`raspberry.ts`** : Modèle représentant un Raspberry.
@@ -31,23 +33,28 @@ Contient les fichiers de configuration du projet.
 - **`serverPort.ts`** : Modèle pour gérer les ports du serveur.
 
 ### `routes/`
+
 - **`initdb.js`** : Route pour initialiser la base de données.
 - **`raspberry.js`** : Route pour les opérations liées aux Raspberry.
 - **`raspberryPort.js`** : Route pour gérer les ports des Raspberry.
 - **`serverPort.ts`** : Route pour les ports de serveur.
 
 ### `seeders/`
+
 - Contient les scripts pour insérer des données initiales dans la base de données.
 
 ### `scripts/`
+
 - **`register.sh`** : Script shell pour enregistrer ou configurer des dépendances ou services.
 
 ## Docker
 
 ### `docker/`
+
 Contient les configurations Docker pour déployer l'application.
 
 ### `docker-compose.yaml`
+
 Fichier pour orchestrer les conteneurs Docker.
 
 ## Docs
@@ -63,16 +70,14 @@ Contient la documentation liée au projet, tel que les diagrammes UML.
 - **`README.md`** : Documentation du projet.
 
 # Pré-requis
+
 - Node.js
 - Docker Desktop (version qui inclue docker compose)
 
-
 # Utilisation
 
--   Dans backend/, executer `npm install`.
+- Dans backend/, executer `npm install`.
 
--   A la racine du projet, executer `docker compose up --build -d`.
+- A la racine du projet, executer `docker compose up --build -d`.
 
--   Générer la structure de la db en appelant /initdb en POST
-
--   Dans le container, executer `npx sequelize-cli db:seed:all` (Si des données existent déjà, les supprimer avec `npx sequelize-cli db:seed:undo:all`)
+- Générer la structure de la db en appelant la route POST /api/initdb du service backend. Executer dans le container

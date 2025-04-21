@@ -31,7 +31,6 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
             res.status(400).json("Missing prop : mac");
             return;
         }
-
         if (!raspberryPortsToCreate) {
             res.status(400).json("Missing prop : raspberryPorts");
             return;
@@ -52,31 +51,56 @@ router.post("/register", async (req: Request<{}, {}, RegisterBody>, res) => {
         });
 
         // Checking if raspberryPorts already exists
-        // ...
+        const existingRaspberryPorts = (
+            await RaspberryPort.findAll({
+                where: {
+                    raspberryMac: mac,
+                    port: {
+                        [sequelize.Op.in]: raspberryPortsToCreate,
+                    },
+                },
+            })
+        ).map((port) => port.dataValues);
+
+        console.log("Existing raspberry ports : ", existingRaspberryPorts);
+
+        // Removing existing existing ports from raspberryPortsToCreate
+        raspberryPortsToCreate.filter((portToCreate) => {
+            // const alreadyExists = existingRaspberryPorts.find((existingPort) => existingPort.port === portToCreate);
+            // console.log("Finding port to create " + portToCreate + (alreadyExists ? " found" : " not found"));
+            // return alreadyExists !== undefined;
+        });
+
+        console.log("Final raspberries to create" + raspberryPortsToCreate);
 
         // Creating raspberryPorts
-        const raspberryPorts = await RaspberryPort.bulkCreate(
-            // Adding raspberryMac to each port
-            raspberryPortsToCreate.map((port) => {
-                const cleanedPort = port.replace(":", "");
-                return {
-                    port: cleanedPort,
-                    type: cleanedPort === port ? "HTTP" : "TCP",
-                    raspberryMac: mac,
-                };
-            })
-        );
+        const createdRaspberryPorts = (
+            await RaspberryPort.bulkCreate(
+                // Adding raspberryMac to each port
+                raspberryPortsToCreate.map((port) => {
+                    const cleanedPort = port.replace(":", "");
+                    return {
+                        port: cleanedPort,
+                        type: cleanedPort === port ? "HTTP" : "TCP",
+                        raspberryMac: mac,
+                    };
+                })
+            )
+        ).map((port) => port.dataValues);
+
+        const raspberryPorts = [...existingRaspberryPorts, ...createdRaspberryPorts];
 
         // Creating server ports in dba
-        const serverPortsToCreate = raspberryPorts.map((raspberryPort) => ({
-            raspberryPortId: raspberryPort.getDataValue("id") as number,
+        const serverPortsToCreate = createdRaspberryPorts.map((raspberryPort) => ({
+            raspberryPortId: raspberryPort.id,
         }));
-        const serverPorts = (await ServerPort.bulkCreate(serverPortsToCreate)).map(
-            (serverPort) => serverPort.getDataValue("port") as string
-        );
+        const serverPorts = (await ServerPort.bulkCreate(serverPortsToCreate)).map((port) => port.dataValues);
+
+        // Sort resulting serverPorts to match initial asked order
+        // TODO
 
         // Result
-        res.status(200).send(serverPorts.join(","));
+        res.status(200).json(serverPorts.map((port) => port.port));
     } catch (error) {
         res.status(400).json({
             error: {
